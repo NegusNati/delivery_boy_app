@@ -114,7 +114,7 @@ class ViewOrder extends StatelessWidget {
                                         if (orderList[index].delivered ==
                                             "true") {
                                           Get.snackbar('Hello',
-                                              'Order have been Delivered to you');
+                                              'Order have been Delivered.');
                                         } else {
                                           Get.snackbar(
                                             'Hello',

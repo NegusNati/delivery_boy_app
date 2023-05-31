@@ -8,6 +8,7 @@ import '../pages/auth/sign_in.dart';
 import '../pages/detail/beverage_detail.dart';
 import '../pages/detail/popular_food_detail.dart';
 import '../pages/detail/recomended_food_detail.dart';
+import '../pages/home_page.dart';
 import '../pages/order/order_page.dart';
 import '../pages/splash/splash_page.dart';
 
@@ -45,7 +46,7 @@ class RouteHelper {
   static List<GetPage> routes = [
         GetPage(
         name: inital,
-        page: () =>  const OrderPage(),
+        page: () =>  const HomePage(),
         transition: Transition.fade),
     GetPage(
         name: signIn,
