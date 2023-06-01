@@ -30,55 +30,57 @@ class _OrderPageState extends State<OrderPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+          // Get.find<OrderController>().getOrderList();
     _isLoggedIn = Get.find<AuthController>().userHaveLoggedIn();
     if (_isLoggedIn) {
       _tabController = TabController(length: 2, vsync: this);
       Get.find<OrderController>().getOrderList();
-    } else {}
+    } else {
+      
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _loadResource,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("All Orders"),
-          backgroundColor: AppColors.mainColor,
-        ),
-        body: _isLoggedIn
-            ? Column(
-                children: [
-                  SizedBox(
-                    width: Dimensions.screenWidth,
-                    child: TabBar(
-                      indicatorColor: Theme.of(context).primaryColor,
-                      labelColor: Theme.of(context).primaryColor,
-                      unselectedLabelColor: Theme.of(context).disabledColor,
-                      indicatorWeight: 3,
-                      tabs: const [
-                        Tab(
-                          text: "Current Orders",
-                        ),
-                        Tab(
-                          text: "Delivered Orders",
-                        ),
-                      ],
-                      controller: _tabController,
-                    ),
-                  ),
-                  Expanded(
-                    child:
-                        TabBarView(controller: _tabController, children: const [
-                      ViewOrder(isCurrent: true),
-                      ViewOrder(isCurrent: false),
-                    ]),
-                  )
-                ],
-              )
-            : const PleaseLogin(),
+          // Get.find<OrderController>().getOrderList();
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("All Orders"),
+        backgroundColor: AppColors.mainColor,
       ),
+      body: _isLoggedIn
+          ? Column(
+              children: [
+                SizedBox(
+                  width: Dimensions.screenWidth,
+                  child: TabBar(
+                    indicatorColor: Theme.of(context).primaryColor,
+                    labelColor: Theme.of(context).primaryColor,
+                    unselectedLabelColor: Theme.of(context).disabledColor,
+                    indicatorWeight: 3,
+                    tabs: const [
+                      Tab(
+                        text: "Current Orders",
+                      ),
+                      Tab(
+                        text: "Delivered Orders",
+                      ),
+                    ],
+                    controller: _tabController,
+                  ),
+                ),
+                Expanded(
+                  child:
+                      TabBarView(controller: _tabController, children: const [
+                    ViewOrder(isCurrent: true),
+                    ViewOrder(isCurrent: false),
+                  ]),
+                )
+              ],
+            )
+          : const PleaseLogin(),
     );
   }
 }

@@ -43,7 +43,10 @@ class SignUpPage extends StatelessWidget {
       } else if (!GetUtils.isNumericOnly(phone)) {
         showCustomSnackBar("Only Numeric values are accepted.",
             title: "Phone Number");
-      } else if (password.isEmpty) {
+      } else if (phone.length != 10) {
+        showCustomSnackBar("Phone Number must be 10 digits",
+            title: "Phone Number length");
+      }else if (password.isEmpty) {
         showCustomSnackBar("Please, Type in your Password.", title: "Password");
       } else if (password.length < 6) {
         showCustomSnackBar("Password must be above 6 characters",
@@ -74,6 +77,7 @@ class SignUpPage extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
+                        SizedBox( height:Dimensions.Height15),
                         Container(
                           margin: EdgeInsets.only(top: Dimensions.Height30),
                           // width: double.maxFinite,
@@ -82,7 +86,7 @@ class SignUpPage extends StatelessWidget {
                             backgroundColor: Colors.white,
                             radius: Dimensions.Height30 * 4,
                             backgroundImage: const AssetImage(
-                              "assets/image/logo part 1.png",
+                              "assets/image/forgot.png",
                             ),
                           ),
                         ),
@@ -151,24 +155,7 @@ class SignUpPage extends StatelessWidget {
                         SizedBox(
                           height: Dimensions.Height20,
                         ),
-                        RichText(
-                            text: TextSpan(
-                                text: "Sign up using other methods",
-                                style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontSize: Dimensions.fontSize16))),
-                        Wrap(
-                          children: List.generate(
-                              3,
-                              (index) => Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: CircleAvatar(
-                                      radius: Dimensions.radiusSize30 - 5,
-                                      backgroundImage: AssetImage(
-                                          "assets/image/${signUpImages[index]}"),
-                                    ),
-                                  )),
-                        )
+                       
                       ],
                     ),
                   )

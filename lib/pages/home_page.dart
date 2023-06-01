@@ -8,6 +8,8 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../../coltrollers/auth_controller.dart';
 import '../../coltrollers/user_controller.dart';
 import '../../utills/colors.dart';
+import '../coltrollers/order_controller.dart';
+import 'account/please_login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,26 +22,24 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late PersistentTabController _controller;
 
-
   void onTapNav(int index) {
     setState(() {
       _selectedIndex = index;
+          // Get.find<OrderController>().getOrderList();
+
     });
   }
 
   @override
   void initState() {
     super.initState();
-
+     Get.find<OrderController>().getOrderList();
+    
     _controller = PersistentTabController(initialIndex: 0);
   }
 
-
   List<Widget> _buildScreens() {
-    return [
-      const OrderPage(),
-      const AccountPage()
-    ];
+    return [OrderPage(), const AccountPage()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -61,10 +61,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-      bool userLoggedIn = Get.find<AuthController>().userHaveLoggedIn();
+    bool userLoggedIn = Get.find<AuthController>().userHaveLoggedIn();
     if (userLoggedIn) {
       Get.find<UserController>().getUserInfo();
+      // Get.find<OrderController>().getOrderList();
     }
+
     return PersistentTabView(
       context,
       controller: _controller,

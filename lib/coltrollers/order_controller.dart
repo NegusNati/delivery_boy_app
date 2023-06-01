@@ -32,6 +32,7 @@ class OrderController extends GetxController implements GetxService {
   }
 
   Future<void> getOrderList() async {
+    
     _isLoading = true;
     Response response = await orderRepo.getOrderList();
 
@@ -52,7 +53,6 @@ class OrderController extends GetxController implements GetxService {
           _historyOrderList.add(orderModel);
         } else {
           print("NUll Values in order Model");
-
         }
       });
     } else {
@@ -64,5 +64,52 @@ class OrderController extends GetxController implements GetxService {
     print("length of hist : ${_historyOrderList.length}");
 
     update();
+    // Future.delayed(Duration(milliseconds: 20),(){update();});
+  }
+
+  bool existInHistory(int orderId) {
+    if (_historyOrderList.contains(orderId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool existInCurrent(int orderId) {
+    if (_currentOrderList.contains(orderId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  late OrderModel thatOrder;
+  Future<OrderModel> getTheOrder(int orderId) async {
+    late OrderModel theOrder;
+    print("in getTheOrder");
+
+    _historyOrderList.forEach((order) {
+      if (order.id == orderId) {
+        theOrder = order;
+        print("theOrder in HIst");
+      }
+    });
+
+    _currentOrderList.forEach((order) {
+      if (order.id == orderId) {
+        theOrder = order;
+        print("theOrder in Curr");
+      }
+    });
+    print(theOrder.handover);
+    thatOrder = theOrder;
+
+    print(thatOrder.handover);
+    _isLoading = true;
+    // Future.delayed(Duration(milliseconds: 20),(){update();});
+
+    // update();
+
+    return theOrder;
   }
 }

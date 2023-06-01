@@ -49,6 +49,7 @@ class OrderModel {
          this.pickedUp,
          this.delivered,
          this.canceled,
+         this.refunded,
          this.scheduled,
          this.failed,
          this.detailsCount,
@@ -76,6 +77,7 @@ class OrderModel {
     pickedUp = json['picked_up']??"";
     delivered = json['delivered']??"";
     canceled = json['canceled']??"";
+    refunded = json['refunded']??"";
     scheduled = json['scheduled'];
     failed = json['failed']??"";
     detailsCount = json['details_count'];

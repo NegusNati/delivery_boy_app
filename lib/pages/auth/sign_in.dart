@@ -1,12 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../coltrollers/auth_controller.dart';
-import '../../pages/auth/sign_up_page.dart';
 import '../../utills/dimensions.dart';
 import '../../widgets/small_text.dart';
 import 'package:get/get.dart';
 
-import '../../models/signup_model.dart';
 import '../../routes/route_helper.dart';
 import '../../utills/colors.dart';
 import '../../widgets/big_text.dart';
@@ -33,6 +30,9 @@ class SignInPage extends StatelessWidget {
       } else if (!GetUtils.isNumericOnly(phone)) {
         showCustomSnackBar("Only Numeric values are accepted.",
             title: "Phone Number");
+      } else if (phone.length != 10) {
+        showCustomSnackBar("Phone Number must be 10 digits",
+            title: "Phone Number length");
       } else if (password.isEmpty) {
         showCustomSnackBar("Please, Type in your Password.", title: "Password");
       } else if (password.length < 6) {
@@ -59,7 +59,9 @@ class SignInPage extends StatelessWidget {
                 ? SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        SizedBox(height: Dimensions.Height30 * 2),
                         Container(
                           margin: EdgeInsets.only(top: Dimensions.Height30),
                           // width: double.maxFinite,
@@ -68,10 +70,11 @@ class SignInPage extends StatelessWidget {
                             backgroundColor: Colors.white,
                             radius: Dimensions.Height30 * 3,
                             backgroundImage: const AssetImage(
-                              "assets/image/logo part 1.png",
+                              "assets/image/forgot.png",
                             ),
                           ),
                         ),
+                        SizedBox(height: Dimensions.Height30),
                         Container(
                           margin: EdgeInsets.only(left: Dimensions.Width10),
                           child: Column(
@@ -155,27 +158,6 @@ class SignInPage extends StatelessWidget {
                         SizedBox(
                           height: Dimensions.Height15,
                         ),
-                        SizedBox(
-                          height: Dimensions.Height20,
-                        ),
-                        RichText(
-                            text: TextSpan(
-                                text: "Don't have an account?",
-                                style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontSize: Dimensions.fontSize16),
-                                children: [
-                              TextSpan(
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () => Get.to(
-                                        () => const SignUpPage(),
-                                        transition: Transition.fade),
-                                  text: " Create",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: Dimensions.fontSize16,
-                                      fontWeight: FontWeight.bold))
-                            ])),
                       ],
                     ),
                   )

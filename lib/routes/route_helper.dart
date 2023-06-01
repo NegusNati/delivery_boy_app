@@ -30,7 +30,7 @@ class RouteHelper {
   //best way by far for data passing
   static String getInital() => inital;
   static String getPopularFood(int pageId) => '$popularFood?pageId=$pageId';
-  static String getBeverages(int pageId) => '$beverages?pageId=$pageId';
+  static String getBeverages() => '$beverages';
   static String getRecomendedFood(int pageId) =>
       '$recomendedFood?pageId=$pageId';
   static String getCartPage() => cartPage;
@@ -69,7 +69,7 @@ class RouteHelper {
         page: () {
           var pageId = Get.parameters['pageId'];
           // Get.lazyPut(() => CartController(cartRepo: CartRepo()));
-          return BeverageDetail(pageId: int.parse(pageId!));
+          return OrderPage();
         },
 
         //to make cool trasitions of routes

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../../coltrollers/order_controller.dart';
+import '../../coltrollers/order_detail_controller.dart';
 import '../../utills/dimensions.dart';
 import 'package:get/get.dart';
 
@@ -22,9 +24,12 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController controller;
 
   Future<void> _loadResource() async {
-    await Get.find<PopularProductController>().getPopularProductList();
-    await Get.find<BeverageController>().getPopularProductList();
-    await Get.find<RecomendedProductController>().getRecomendedrProductList();
+       await Get.find<OrderController>().getOrderList();
+       await Get.find<OrderDetailController>().getOrderDetailList();
+       
+
+    // await Get.find<BeverageController>().getPopularProductList();
+    // await Get.find<RecomendedProductController>().getRecomendedrProductList();
   }
 
   @override
@@ -53,12 +58,13 @@ class _SplashScreenState extends State<SplashScreen>
               scale: animation,
               child: Center(
                   child: Image.asset(
-                "assets/image/logo part 1.png",
+                "assets/image/onboard_3.png",
                 width: Dimensions.splashImg,
+               
               ))),
           Center(
               child: Image.asset(
-            "assets/image/logo part 2.png",
+            "assets/image/logo_name.png",
             width: Dimensions.splashImg,
           )),
         ],

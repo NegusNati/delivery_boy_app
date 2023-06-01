@@ -1,20 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:delivery_boy_app/coltrollers/order_detail_controller.dart';
+import 'package:delivery_boy_app/models/order.dart';
+import 'package:delivery_boy_app/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
-import '../../coltrollers/popular_product_controller.dart';
+import 'package:intl/intl.dart';
+import '../../coltrollers/order_controller.dart';
 import 'package:get/get.dart';
 
+import '../../routes/route_helper.dart';
 import '../../utills/colors.dart';
 import '../../utills/dimensions.dart';
+import '../../utills/styles.dart';
 import '../../widgets/big_text.dart';
-import '../../widgets/expandable_text.dart';
+import '../../widgets/icon_widget.dart';
+import '../home_page.dart';
+import '../order/order_page.dart';
 
-import '../../coltrollers/cart_controller.dart';
-import '../../coltrollers/recomended_products_controller.dart';
-import '../../routes/route_helper.dart';
-import '../../utills/app_constants.dart';
-import '../../widgets/app_icon.dart';
-
-class RecomendedFoodDetail extends StatelessWidget {
+class RecomendedFoodDetail extends StatefulWidget {
   int pageId;
   RecomendedFoodDetail({
     Key? key,
@@ -22,218 +24,465 @@ class RecomendedFoodDetail extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<RecomendedFoodDetail> createState() => _RecomendedFoodDetailState();
+}
+
+class _RecomendedFoodDetailState extends State<RecomendedFoodDetail> {
+  // Future<OrderModel> go() async {
+  //   return Get.find<OrderController>().getTheOrder(widget.pageId);
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    print(" in det ");
+
+    // Get.find<OrderController>().thatOrder;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var recomendedProduct =
-        Get.find<RecomendedProductController>().recomendedProductList[pageId];
-    Get.find<PopularProductController>()
-        .initProduct(Get.find<CartController>(), recomendedProduct);
+    // Get.find<OrderController>().thatOrder;
+    // var product =
+    //     Get.find<OrderDetailController>().filteredOrders[widget.pageId];
+    print(" in det 2");
+    // Get.find<PopularProductController>()
+    //     .initProduct(Get.find<CartController>(), recomendedProduct);
+
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: const Text("All Orders"),
+        backgroundColor: AppColors.mainColor,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back_ios_sharp),
+            onPressed: () {
+              // Get.find<OrderController>().getOrderList();
+              // Get.toNamed(RouteHelper.getInital());
+              Get.back();
+              // Get.to(OrderPage());
+              // Navigator.pop(context);
+            
+              
+            },
+          )
+        ],
+      ),
       backgroundColor: Colors.white,
-      body: CustomScrollView(slivers: [
-        SliverAppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: 70,
-          title:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            GestureDetector(
-                onTap: () {
-                  Get.toNamed(RouteHelper.getInital());
-                },
-                child: const AppIcon(icon: Icons.arrow_back_ios)),
-            // the cart icon
-            GetBuilder<PopularProductController>(builder: (product) {
-              return GestureDetector(
-                onTap: () {
-                  Get.toNamed(RouteHelper.getCartPage());
-                },
-                child: Stack(
-                  children: [
-                    const AppIcon(
-                      icon: Icons.shopping_cart_checkout_outlined,
-                    ),
-                    Get.find<PopularProductController>().totalItems >= 1
-                        ? Positioned(
-                            right: 0,
-                            top: 0,
-                            child: AppIcon(
-                              icon: Icons.circle,
-                              iconSize: 20,
-                              iconColor: Colors.transparent,
-                              backgroundColor: AppColors.mainColor,
+      body: GetBuilder<OrderController>(builder: (orderController) {
+        Widget timeWidget() {
+          final dateTime =
+              DateTime.parse(orderController.thatOrder.createdAt.toString());
+
+          final format = DateFormat('yyyy-MM-dd HH:mm a');
+          final clockString = format.format(dateTime);
+
+          return Text(
+            clockString.toString(),
+            style: robotoMedium.copyWith(
+              color: Theme.of(context).primaryColor,
+              fontSize: Dimensions.fontSize20,
+            ),
+          );
+        }
+
+        print("object");
+        print(orderController.thatOrder.refunded.toString());
+
+        orderController.getTheOrder(widget.pageId);
+        return orderController.isLoading
+            ? Container(
+                margin: const EdgeInsets.all(30),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      BigText(
+                          text: "...............................",
+                          color: Theme.of(context).disabledColor),
+                      SizedBox(height: Dimensions.Width30),
+                      Row(children: [
+                        Text(
+                          "Order ID: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        Text(
+                          orderController.thatOrder.id.toString(),
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        // BigText(text: orderController.thatOrder.id.toString())
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+                      Row(children: [
+                        Text(
+                          "Order Status: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        Text(
+                          orderController.thatOrder.orderStatus.toString(),
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        // BigText(text: orderController.thatOrder.id.toString())
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+                      Row(children: [
+                        Text(
+                          "To User: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        Text(
+                          orderController.thatOrder.accepted.toString(),
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        // BigText(text: orderController.thatOrder.id.toString())
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+                      Row(children: [
+                        Text(
+                          "To Phone: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        Text(
+                          orderController.thatOrder.confirmed.toString(),
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        // BigText(text: orderController.thatOrder.id.toString())
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+                      Row(children: [
+                        Text(
+                          "Location: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        Text(
+                          orderController.thatOrder.refunded == Null ||
+                                  orderController.thatOrder.refunded == ""
+                              ? "Unspecified"
+                              : orderController.thatOrder.refunded.toString(),
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        // BigText(text: orderController.thatOrder.id.toString())
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+                      Row(children: [
+                        Text(
+                          "Longitude: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        Text(
+                          orderController.thatOrder.handover.toString(),
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        // BigText(text: orderController.thatOrder.id.toString())
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+                      Row(children: [
+                        Text(
+                          "Latitude: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        Text(
+                          orderController.thatOrder.pickedUp.toString(),
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        // BigText(text: orderController.thatOrder.id.toString())
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+                      Row(children: [
+                        Text(
+                          "Ordered At: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        timeWidget()
+                        // BigText(text: orderController.thatOrder.id.toString())
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+                      Row(children: [
+                        Text(
+                          "Payment Status: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        Text(
+                          orderController.thatOrder.paymentStatus.toString(),
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+                      Row(children: [
+                        Text(
+                          "Paid Amount: ",
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.Width5),
+                        Text(
+                          orderController.thatOrder.orderAmount.toString(),
+                          style: robotoMedium.copyWith(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: Dimensions.fontSize20,
+                          ),
+                        ),
+                      ]),
+                      SizedBox(height: Dimensions.Height5 * 4),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text(
+                                " - Food Items in the Order - ",
+                                style: robotoMedium.copyWith(
+                                  color: Theme.of(context).disabledColor,
+                                  fontSize: Dimensions.fontSize16,
+                                ),
+                              ),
                             ),
-                          )
-                        : Container(),
-                    Positioned(
-                        right: 5,
-                        top: 2,
-                        child: BigText(
-                          text: Get.find<PopularProductController>()
-                              .totalItems
-                              .toString(),
-                          color: Colors.white,
-                          size: 14,
-                        )),
-                  ],
-                ),
-              );
-            }),
-          ]),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(30),
-            child: Container(
-              height: Dimensions.Height20 * 2,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(Dimensions.radiusSize20),
-                  topRight: Radius.circular(Dimensions.radiusSize20),
-                ),
-              ),
-              padding: EdgeInsets.only(
-                  bottom: Dimensions.Height5, top: Dimensions.Height5),
-              width: double.maxFinite,
-              child: Center(
-                child: BigText(
-                  text: recomendedProduct.name!,
-                  size: Dimensions.fontSize26,
-                ),
-              ),
-            ),
-          ),
-          pinned: true,
-          backgroundColor: AppColors.yellowColor,
-          expandedHeight: 350,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Image.network(
-                AppConstants.BASE_URL +
-                    AppConstants.UPLOAD_URL +
-                    recomendedProduct.img!,
-                fit: BoxFit.cover,
-                width: double.maxFinite),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Column(
-            children: [
-              Container(
-                  margin: EdgeInsets.only(
-                      left: Dimensions.Width20,
-                      right: Dimensions.Width20,
-                      bottom: Dimensions.Height20,
-                      top: Dimensions.Height5),
-                  child: ExpandableText(
-                    text: recomendedProduct.description!,
-                    size: Dimensions.fontSize16,
-                  )),
-            ],
-          ),
-        ),
-      ]),
-      bottomNavigationBar:
-          GetBuilder<PopularProductController>(builder: (productController) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: Dimensions.Width20 * 3,
-                right: Dimensions.Width20 * 3,
-                bottom: Dimensions.Height20 / 2,
-                top: Dimensions.Height20 / 2,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      productController.setQuantity(false);
-                    },
-                    child: AppIcon(
-                      icon: Icons.remove,
-                      backgroundColor: AppColors.mainColor,
-                      iconColor: Colors.white,
-                      newSize: Dimensions.fontSize26,
-                    ),
+                          ]),
+                      SizedBox(height: Dimensions.Height5 * 3),
+                      Row(children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30),
+                          child: Text(
+                            "........",
+                            style: robotoMedium.copyWith(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: Dimensions.fontSize20,
+                            ),
+                          ),
+                        ),
+                      ]),
+                      SizedBox(height: Dimensions.Height5),
+
+                      GetBuilder<OrderDetailController>(
+                          builder: (orderDetailController) {
+                        List<Map> orderDetailList = [];
+
+                        if (orderDetailController.filteredOrders.isNotEmpty) {
+                          orderDetailList =
+                              orderDetailController.getTheOrder(widget.pageId);
+                        }
+                        return orderDetailController.isLoading == false
+                            ? ListView.builder(
+                                // addAutomaticKeepAlives: true,
+                                reverse: true,
+                                shrinkWrap:
+                                    true, //use it with AlwaysScrollableScrollPhysics
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: orderDetailList.length,
+                                itemBuilder: (context, index) {
+                                  print(" the hhh " + index.toString());
+                                  return Column(children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Food Id: ",
+                                          style: robotoMedium.copyWith(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: Dimensions.fontSize20,
+                                          ),
+                                        ),
+                                        SizedBox(height: Dimensions.Width5),
+                                        Text(
+                                          orderDetailList[index]['foodsId']
+                                              .toString(),
+                                          style: robotoMedium.copyWith(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: Dimensions.fontSize20,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(children: [
+                                      Text(
+                                        "Food Name: ",
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                      SizedBox(height: Dimensions.Width5),
+                                      Text(
+                                        orderDetailList[index]['foodName']
+                                            .toString(),
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                    ]),
+                                    SizedBox(height: Dimensions.Height5),
+                                    Row(children: [
+                                      Text(
+                                        "Food Price: ",
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                      SizedBox(height: Dimensions.Width5),
+                                      Text(
+                                        orderDetailList[index]['foodPrice']
+                                            .toString(),
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                    ]),
+                                    SizedBox(height: Dimensions.Height5),
+                                    Row(children: [
+                                      Text(
+                                        "Food Location: ",
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                      SizedBox(height: Dimensions.Width5),
+                                      Text(
+                                        orderDetailList[index]['foodlocation']
+                                            .toString(),
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                    ]),
+                                    SizedBox(height: Dimensions.Height5),
+                                    Row(children: [
+                                      Text(
+                                        "Food Date: ",
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                      SizedBox(height: Dimensions.Width5),
+                                      Text(
+                                        orderDetailList[index]['foodCreated']
+                                            .toString(),
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                    ]),
+                                    SizedBox(height: Dimensions.Height5),
+                                    Row(children: [
+                                      Text(
+                                        "Food Quantity: ",
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                      SizedBox(height: Dimensions.Width5),
+                                      Text(
+                                        orderDetailList[index]['foodQuantity']
+                                            .toString(),
+                                        style: robotoMedium.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: Dimensions.fontSize20,
+                                        ),
+                                      ),
+                                    ]),
+                                    Row(children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 30),
+                                        child: Text(
+                                          "........",
+                                          style: robotoMedium.copyWith(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: Dimensions.fontSize20,
+                                          ),
+                                        ),
+                                      ),
+                                    ]),
+                                  ]);
+                                })
+                            : const CustomLoader();
+                      }),
+
+                      //index is the number of items you want in the list
+
+                      SizedBox(height: Dimensions.Width30),
+                      BigText(
+                          text: "...............................",
+                          color: Theme.of(context).disabledColor),
+                      SizedBox(height: Dimensions.Width30),
+                    ],
                   ),
-                  BigText(
-                    text: productController.inCartItems.toString(),
-                    color: AppColors.mainBlackColor,
-                    size: Dimensions.fontSize26,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      productController.setQuantity(true);
-                    },
-                    child: AppIcon(
-                      icon: Icons.add,
-                      backgroundColor: AppColors.mainColor,
-                      iconColor: Colors.white,
-                      newSize: Dimensions.fontSize20,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: Dimensions.bottomHeightBarSize,
-              padding: EdgeInsets.only(
-                  top: Dimensions.Height30,
-                  bottom: Dimensions.Height30,
-                  left: Dimensions.Width20,
-                  right: Dimensions.Width20),
-              decoration: BoxDecoration(
-                color: AppColors.buttonBackgroundColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(Dimensions.radiusSize20 * 2),
-                  topRight: Radius.circular(Dimensions.radiusSize20 * 2),
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //the add and remove button
-                  Container(
-                      padding: EdgeInsets.only(
-                          top: Dimensions.Height20,
-                          bottom: Dimensions.Height20,
-                          left: Dimensions.Width20,
-                          right: Dimensions.Width20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusSize20),
-                      ),
-                      child: Icon(
-                        Icons.favorite_sharp,
-                        color: AppColors.mainColor,
-                      )),
-                  //the add to cart Button(
-                  GestureDetector(
-                    onTap: () {
-                      productController.addItem(recomendedProduct);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          top: Dimensions.Height20,
-                          bottom: Dimensions.Height20,
-                          left: Dimensions.Width20,
-                          right: Dimensions.Width20),
-                      decoration: BoxDecoration(
-                        color: AppColors.mainColor,
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusSize20),
-                      ),
-                      child: BigText(
-                        text: " \$ ${recomendedProduct.price!} | Add To Cart",
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
+              )
+            : const CustomLoader();
       }),
     );
   }
