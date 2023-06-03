@@ -54,7 +54,7 @@ class OrderDetailController extends GetxController implements GetxService {
     // print("in getTheOrder of detail${_filteredOrders[0].details}");
 
     for (var order in _filteredOrders) {
-      print('order .......... ${order}');
+      print('order .......... $order');
       if (order.orderId == orderId) {
         print('id .......... ');
 
@@ -72,13 +72,13 @@ class OrderDetailController extends GetxController implements GetxService {
               "foodDescription": detail.foodDetails.description.toString(),
               "foodPrice": detail.foodDetails.price.toString(),
               "foodStrars": detail.foodDetails.price.toString(),
-              "foodlocation": detail.foodDetails.price.toString(),
+              "foodlocation": detail.foodDetails.location.toString(),
               "foodCreated": detail.foodDetails.createdAt.toString(),
               "foodQuantity": detail.quantity.toString(),
             };
 
             orderDetailList.add(resp);
-            print("theOrder from detail " + detail.foodDetails.name.toString());
+            print("theOrder from detail ${detail.foodDetails.name}");
           }
         }
       }
